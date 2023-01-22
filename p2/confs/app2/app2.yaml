@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-two
+  name: app-two
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-two
+  template:
+    metadata:
+      labels:
+        app: app-two
+    spec:
+      containers:
+      - name: app-two
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/
+          name: conf-vol
+        - mountPath: /usr/share/nginx/html
+          readOnly: false
+          name: data-vol
+        - mountPath: /var/log/nginx
+          name: log-vol
+      volumes:
+      - name: conf-vol
+        configMap:
+          name: app-two
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      - name: data-vol
+        hostPath:
+          path: /vagrant/confs/html
+      - name: log-vol
+        emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-two
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: app-two

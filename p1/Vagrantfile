@@ -1,0 +1,66 @@
+
+BOX_BASE = "generic/debian11"
+BOX_URL = 
+BOX_RAM_MB = "1024"
+BOX_CPU_COUNT = "1"
+
+
+Vagrant.configure("2") do |config|
+  
+  config.ssh.username = "vagrant"
+  config.ssh.insert_key = false
+  config.ssh.host = "127.0.0.1"
+  config.ssh.guest_port = 22
+
+  config.vm.box = BOX_BASE
+  config.vm.box_check_update = false
+  # config.vbguest.installer_options = { allow_kernel_upgrade: true }
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = BOX_CPU_COUNT
+    vb.memory = BOX_RAM_MB
+  end
+
+  config.vm.define "Server" do |server|
+    server.vm.hostname = "mehillS"
+    server.vm.network "private_network", ip: "192.168.56.110", bridged: "wlan0"
+    server.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    server.vm.provision "shell", privileged: true, path: "scripts/server.sh", args:["192.168.56.110", "mehillS", "/vagrant/confs/node-token"], run: "always"
+    server.vm.provider "virtualbox" do |vb|
+			vb.name = "mehillS"
+		end
+  end
+
+  config.vm.define "ServerWorker" do |serverWorker|
+    serverWorker.vm.hostname = "mehillSW"
+    serverWorker.vm.network "private_network", ip: "192.168.56.111", bridged: "wlan0"
+    serverWorker.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    serverWorker.vm.provision "shell", privileged: true, path: "scripts/worker.sh", args:["192.168.56.110", "192.168.56.111", "/vagrant/confs/node-token"], run: "always"
+    serverWorker.vm.provider "virtualbox" do |vb|
+			vb.name = "mehillSW"
+		end
+  end
+
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  config.vm.network "public_network", bridge: "wlan0"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+
+end

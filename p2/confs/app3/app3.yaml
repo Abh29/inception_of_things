@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-three
+  name: app-three
+spec:
+  selector:
+    matchLabels:
+      app: app-three
+  template:
+    metadata:
+      labels:
+        app: app-three
+    spec:
+      containers:
+      - name: app-three
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/
+          name: conf-vol
+        - mountPath: /usr/share/nginx/html
+          readOnly: false
+          name: data-vol
+        - mountPath: /var/log/nginx
+          name: log-vol
+      volumes:
+      - name: conf-vol
+        configMap:
+          name: app-three
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      - name: data-vol
+        hostPath:
+          path: /vagrant/confs/html
+      - name: log-vol
+        emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-three
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: app-three
