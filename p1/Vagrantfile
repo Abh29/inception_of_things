@@ -11,7 +11,9 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
   config.ssh.host = "127.0.0.1"
   config.ssh.guest_port = 22
-
+  config.ssh.private_key_path = "~/.ssh/id_rsa"
+  config.ssh.forward_agent = true
+  
   config.vm.box = BOX_BASE
   config.vm.box_check_update = false
   # config.vbguest.installer_options = { allow_kernel_upgrade: true }
@@ -24,8 +26,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "Server" do |server|
     server.vm.hostname = "mehillS"
     server.vm.network "private_network", ip: "192.168.56.110", bridged: "wlan0"
-    server.vm.synced_folder ".", "/vagrant", type: "virtualbox"
-    server.vm.provision "shell", privileged: true, path: "scripts/server.sh", args:["192.168.56.110", "mehillS", "/vagrant/confs/node-token"], run: "always"
+    server.vm.synced_folder ".", "/home/vagrant", type: "virtualbox"
+    server.vm.provision "shell", privileged: true, path: "scripts/server.sh", args:["192.168.56.110", "mehillS", "/home/vagrant/confs/node-token"], run: "always"
     server.vm.provider "virtualbox" do |vb|
 			vb.name = "mehillS"
 		end
@@ -34,8 +36,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "ServerWorker" do |serverWorker|
     serverWorker.vm.hostname = "mehillSW"
     serverWorker.vm.network "private_network", ip: "192.168.56.111", bridged: "wlan0"
-    serverWorker.vm.synced_folder ".", "/vagrant", type: "virtualbox"
-    serverWorker.vm.provision "shell", privileged: true, path: "scripts/worker.sh", args:["192.168.56.110", "192.168.56.111", "/vagrant/confs/node-token"], run: "always"
+    serverWorker.vm.synced_folder ".", "/home/vagrant", type: "virtualbox"
+    serverWorker.vm.provision "shell", privileged: true, path: "scripts/worker.sh", args:["192.168.56.110", "192.168.56.111", "/home/vagrant/confs/node-token"], run: "always"
     serverWorker.vm.provider "virtualbox" do |vb|
 			vb.name = "mehillSW"
 		end

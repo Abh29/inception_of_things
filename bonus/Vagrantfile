@@ -16,28 +16,22 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = false
   # config.vbguest.installer_options = { allow_kernel_upgrade: true }
 
-  # config.vm.provider "vmware_desktop" do |vm|
-  #   vm.vmx["memsize"] = BOX_RAM_MB
-  #   vm.vmx["numvcpus"] = BOX_CPU_COUNT
-  # end
-
-  config.vm.provider "virtualbox" do |vb|
-    vb.cpus = BOX_CPU_COUNT
-    vb.memory = BOX_RAM_MB
+  config.vm.provider "vmware_desktop" do |vm|
+    vm.vmx["memsize"] = BOX_RAM_MB
+    vm.vmx["numvcpus"] = BOX_CPU_COUNT
   end
 
   config.vm.define "Server" do |server|
     server.vm.hostname = "mehillS"
     server.vm.network "private_network", ip: "192.168.56.110", bridged: "wlan0"
-    server.vm.synced_folder ".", "/home/vagrant", type: "virtualbox"
+    server.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     server.vm.provision "shell", privileged: true, path: "scripts/server.sh", args:["192.168.56.110", "mehillS", "/vagrant/confs/node-token"], run: "always"
-    server.vm.provider "virtualbox" do |vm|
+    server.vm.provider "vmware_desktop" do |vm|
 			vm.name = "mehillS"
 		end
   end
 
   config.vm.network "public_network", bridge: "wlan0"
-
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
