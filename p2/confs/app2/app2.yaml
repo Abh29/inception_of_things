@@ -36,7 +36,7 @@ spec:
               path: nginx.conf
       - name: data-vol
         hostPath:
-          path: /vagrant/confs/html
+          path: /home/vagrant/confs/html
       - name: log-vol
         emptyDir: {}
 
