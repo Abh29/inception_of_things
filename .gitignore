@@ -1,5 +1,6 @@
 .vagrant/
-node-token
 .kube/
 .bash_history
 authorized_keys
+node-token
+p1/confs/node-token
