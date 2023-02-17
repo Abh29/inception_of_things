@@ -1,1 +1,5 @@
 .vagrant/
+node-token
+.kube/
+.bash_history
+authorized_keys
