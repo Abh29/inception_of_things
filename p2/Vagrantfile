@@ -1,5 +1,5 @@
 
-BOX_BASE = "ubuntu2204"
+BOX_BASE = "generic/debian11"
 BOX_URL = 
 BOX_RAM_MB = "1024"
 BOX_CPU_COUNT = "1"
