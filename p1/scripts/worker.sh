@@ -1,4 +1,4 @@
-sudo apt update
+# sudo apt-get update
 
 ## args: server_ip worker_ip token_file
 
