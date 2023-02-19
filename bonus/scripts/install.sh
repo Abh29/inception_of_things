@@ -8,3 +8,4 @@ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.de
 sudo EXTERNAL_URL="http://iot.mehill.42" apt-get install gitlab-ce
 
 
+sudo gitlab-ctl start

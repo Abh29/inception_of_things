@@ -13,7 +13,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
 	 --advertise-address "$1"
 
 
-bash ./run_app.sh
+bash /home/vagrant/scripts/run_app.sh
 
 
 

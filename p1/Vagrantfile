@@ -9,10 +9,10 @@ Vagrant.configure("2") do |config|
   
   config.ssh.username = "vagrant"
   config.ssh.insert_key = false
-  config.ssh.host = "127.0.0.1"
-  config.ssh.guest_port = 22
-  config.ssh.private_key_path = "~/.ssh/id_rsa"
-  config.ssh.forward_agent = true
+  # config.ssh.host = "127.0.0.1"
+  # config.ssh.guest_port = 22
+  # config.ssh.private_key_path = "/home/abh29/.ssh/id_rsa"
+  # config.ssh.forward_agent = true
   
   config.vm.box = BOX_BASE
   config.vm.box_check_update = false
